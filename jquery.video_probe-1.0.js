@@ -28,19 +28,18 @@
       'volumechange'
     ],
     networkStates = [
-      'NETWORK_EMPTY',
-      'NETWORK_IDLE',
-      'NETWORK_LOADING',
-      'NETWORK_NO_SOURCE'
+      'empty',
+      'idle',
+      'loading',
+      'no-source'
     ],
     readyStates = [
-      'HAVE_NOTHING',
-      'HAVE_METADATA',
-      'HAVE_CURRENT_DATA',
-      'HAVE_FUTURE_DATA',
-      'HAVE_ENOUGH_DATA'
+      'nothing',
+      'metadata',
+      'current',
+      'future',
+      'enough'
     ],
-    readyLabels 
     consoleLogger,
     overlayLogger,
     video_probe = function() {
@@ -85,52 +84,53 @@
         $events;
       if ($styles.size() < 1) {
         $(document.body)
-          .after('<style id="video_probe-styles">' +
-                 '.video_probe-net { ' +
-                 'font-size: 18px;' +
-                 ' } ' +
-                 '.video_probe-ready { ' +
-                 'font-size: 18px;' +
-                 ' } ' +
-                 '.video_probe-events { ' +
-                 'font-size: 18px;' +
-                 ' }' +
+          .append('<style id="video_probe-styles">' +
+                  '.video_probe { ' +
+                  'font-size: 16px;' +
+                  'position: absolute;' +
+                  'min-width: 100px;' +
+                  'list-style-type: none;' +
+                  'color: white;' +
+                  'text-shadow: black 2px 2px 2px;' +
+                  'margin: 0;' +
+                  'padding: 3px;' +
+                  'font-family: Lucida Sans Unicode, Lucida Grande, sans-serif;' +
+                  ' } ' +
+                  '.video_probe-events { ' +
+                  'list-style-type: none;' + 
+                  'min-width: 135px;' +
+                  '-webkit-mask-image: -webkit-linear-gradient(top, rgba(0,0,0,0) 0px, rgba(0,0,0,1) 25px);' +
+                  ' } ' +
                  '</style>');
       }
-      $overlay = $('<div class="video_probe-net">net state</div>' +
-                   '<div class="video_probe-ready">ready state</div>' +
-                   '<ol class="video_probe-events"><li>event</li><li>event</li></ol>')
+      $overlay = $('<div class="video_probe video_probe-net" />' +
+                   '<div class="video_probe video_probe-ready" />' +
+                   '<ol class="video_probe video_probe-events"><li>init<li></ol>')
         .insertAfter($video),
       $net = $overlay.eq(0)
         .css({
-          position: 'absolute',
           bottom: $video.height(),
           left: $video.offset().left,
-          width: desiredWidth,
-          'min-width': '100px'
+          width: desiredWidth
         });
       $ready = $overlay.eq(1)
         .css({
-          position: 'absolute',
           bottom: $video.height(),
           left: $net.offset().left + $net.width(),
-          width: desiredWidth,
-          'min-width': '100px'
+          width: desiredWidth
         });
       $events = $overlay.eq(2)
         .css({
-          position: 'absolute',
           bottom: $video.height(),
           left: $ready.offset().left + $ready.width(),
-          width: desiredWidth,
-          'min-width': '100px'
+          width: desiredWidth
         });
         
       console.log($overlay);
       return {
         logEvent: function(event) {
           var
-            $children = $events.children(),
+            $children = $events.children(':not(.video_probe-leaving)'),
             $lastEvent = $children.last(),
             count = $children.size(),
             data = $lastEvent.data('video_probe') || {};
@@ -141,11 +141,17 @@
             return;
           }
           if (count > maxEvents) {
-            $children.first().remove();
+            $children.first()
+              .addClass('video_probe-leaving')
+              .slideUp('fast', function() {
+                $(this).remove();
+              });
           }
           $('<li>' + event.type + '</li>')
-            .data('video_probe', { type: event.type, count: 0 })
-            .appendTo($events);
+            .hide()
+            .data('video_probe', { type: event.type, count: 1 })
+            .appendTo($events)
+            .slideDown('fast');
         },
         logNetState: function($video) {
           $net.text(networkStates[$video[0].networkState]);
