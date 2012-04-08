@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+<head>
+<title>Dueling Video</title>
+</head>
+<body>
+<h1>Plain Video</h1>
+<video id='v0' src='Vfe_html5.mp4' controls>
+Your browser does not support HTML video.
+</video>
+<video id='v1' src='Vfe_html5.mp4' controls>
+Your browser does not support HTML video.
+</video>
+<script src='jquery-1.7.2.js'></script>
+<script src='jquery.video_probe-1.0.js'></script>
+<script>
+$(function() {
+  $('video').video_probe();
+});
+</script>
+</body>
+</html>

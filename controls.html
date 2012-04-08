@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head>
+<title>Plain Video</title>
+</head>
+<body>
+<h1>Plain Video</h1>
+<video src='Vfe_html5.mp4' controls>
+Your browser does not support HTML video.
+</video>
+<button>Play</button>
+<script src='jquery-1.7.2.js'></script>
+<script src='jquery.video_probe-1.0.js'></script>
+<script>
+$(function() {
+  var $video = $('video').video_probe();
+  $('button').click(function() {
+    $video[0].playing ? $video[0].play() : $video[0].pause();
+  });
+});
+</script>
+</body>
+</html>
