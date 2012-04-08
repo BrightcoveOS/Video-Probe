@@ -43,14 +43,16 @@
     consoleLogger,
     overlayLogger,
     video_probe = function() {
-      var
-        $video = this,
-        logger = overlayLogger($video);
-      $.each(events, function(i, e) {
-        $video.bind(e, function(event) {
-          logger.logEvent(event);
-          logger.logNetState($video);
-          logger.logReadyState($video);
+      return this.each(function(_, video) {
+        var
+          $video = $(video),
+          logger = overlayLogger($video);
+        $.each(events, function(i, e) {
+          $video.bind(e, function(event) {
+            logger.logEvent(event);
+            logger.logNetState($video);
+            logger.logReadyState($video);
+          });
         });
       });
     };
@@ -85,6 +87,9 @@
       if ($styles.size() < 1) {
         $(document.body)
           .append('<style id="video_probe-styles">' +
+                  '.video_probe-container { ' +
+                  'position: relative;' +
+                  ' } ' +
                   '.video_probe { ' +
                   'font-size: 16px;' +
                   'position: absolute;' +
@@ -103,30 +108,31 @@
                   ' } ' +
                  '</style>');
       }
+      $video.wrap('<div class="video_probe-container" />');
       $overlay = $('<div class="video_probe video_probe-net" />' +
                    '<div class="video_probe video_probe-ready" />' +
                    '<ol class="video_probe video_probe-events"><li>init<li></ol>')
         .insertAfter($video),
+      console.log($video.offset(), $video.position());
       $net = $overlay.eq(0)
         .css({
-          bottom: $video.height(),
-          left: $video.offset().left,
+          top: 0,
+          left: $video.position().left,
           width: desiredWidth
         });
       $ready = $overlay.eq(1)
         .css({
-          bottom: $video.height(),
-          left: $net.offset().left + $net.width(),
+          top: 0,
+          left: $net.position().left + $net.width(),
           width: desiredWidth
         });
       $events = $overlay.eq(2)
         .css({
-          bottom: $video.height(),
-          left: $ready.offset().left + $ready.width(),
+          top: 0,
+          left: $ready.position().left + $ready.width(),
           width: desiredWidth
         });
         
-      console.log($overlay);
       return {
         logEvent: function(event) {
           var
@@ -154,10 +160,14 @@
             .slideDown('fast');
         },
         logNetState: function($video) {
-          $net.text(networkStates[$video[0].networkState]);
+          $net.css({
+            color: 'rgb(' + ($video[0].networkState / (networkStates.length - 1) * 255) + ',0,0)'
+          }).text(networkStates[$video[0].networkState]);
         },
         logReadyState: function($video) {
-          $ready.text(readyStates[$video[0].readyState]);
+          $ready.css({
+            color: 'rgb(' + ($video[0].readyState / (readyStates.length - 1) * 255) + ',0,0)'
+          }).text(readyStates[$video[0].readyState]);
         }
       };
     };
