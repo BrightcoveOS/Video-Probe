@@ -5,9 +5,40 @@
 </head>
 <body>
 <h1>Plain Video</h1>
-<video src='Vfe_html5.mp4' controls>
+<video src='Vfe_html5.mp4'>
 Your browser does not support HTML video.
 </video>
+<section class='dream'>
+<h2>The Dream</h2>
+<pre>
+$('button').click(function() {
+  missionCriticalAnimation(function() {
+    if ($video[0].paused) {
+      $(this).text('Pause');
+      $video[0].play();
+    } else {
+      $(this).text('Play');
+      $video[0].pause();
+    }
+  });
+});
+</pre>
+</section>
+<section class='reality'>
+<h2>The Reality</h2>
+<pre>
+$('button').click(function() {
+  dissapointYourDesigner();
+  if ($video[0].paused) {
+    $(this).text('Pause');
+    $video[0].play();
+  } else {
+    $(this).text('Play');
+    $video[0].pause();
+  }
+});
+</pre>
+</section>
 <button>Play</button>
 <script src='jquery-1.7.2.js'></script>
 <script src='jquery.video_probe-1.0.js'></script>
@@ -15,8 +46,14 @@ Your browser does not support HTML video.
 $(function() {
   var $video = $('video').video_probe();
   $('button').click(function() {
-    $video[0].playing ? $video[0].play() : $video[0].pause();
-  });
+    if ($video[0].paused) {
+      $(this).text('Pause');
+      $video[0].play();
+    } else {
+      $(this).text('Play');
+      $video[0].pause();
+    }
+ });
 });
 </script>
 </body>
