@@ -1,0 +1,252 @@
+<!doctype html>
+<html>
+<head>
+<title>Mobile Video</title>
+
+<!-- Core and extension CSS files -->
+<link rel="stylesheet" href="deck/core/deck.core.css">
+<link rel="stylesheet" href="deck/extensions/goto/deck.goto.css">
+<link rel="stylesheet" href="deck/extensions/menu/deck.menu.css">
+<link rel="stylesheet" href="deck/extensions/navigation/deck.navigation.css">
+<link rel="stylesheet" href="deck/extensions/status/deck.status.css">
+<link rel="stylesheet" href="deck/extensions/hash/deck.hash.css">
+	
+<!-- Style theme. More available in /themes/style/ or create your own. -->
+<link rel="stylesheet" href="deck/themes/style/web-2.0.css">
+
+<script src="deck/modernizr.custom.js"></script>
+
+<style>
+.deck-container .slide table {
+  border: thin solid #cde;
+  border-collapse: separate;
+  background: #fff;
+  position: relative;
+  z-index: auto;
+  /* http://nicolasgallagher.com/css-drop-shadows-without-images/ */
+  margin-bottom: 1em;
+}
+.borderradius .deck-container .slide table {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+.csstransforms.boxshadow .deck-container .slide table > :first-child:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  background: #fff;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.csstransforms.boxshadow .deck-container .slide table:before, .csstransforms.boxshadow .deck-container .slide table:after {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  bottom: 15px;
+  width: 50%;
+  height: 20%;
+  max-width: 300px;
+  -webkit-box-shadow: 0 15px 10px rgba(0, 0, 0, 0.7);
+  -moz-box-shadow: 0 15px 10px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 15px 10px rgba(0, 0, 0, 0.7);
+}
+.csstransforms.boxshadow .deck-container .slide table:before {
+  left: 10px;
+  -webkit-transform: rotate(-3deg);
+  -moz-transform: rotate(-3deg);
+  -ms-transform: rotate(-3deg);
+  -o-transform: rotate(-3deg);
+  transform: rotate(-3deg);
+}
+.csstransforms.boxshadow .deck-container .slide table:after {
+  right: 10px;
+  -webkit-transform: rotate(3deg);
+  -moz-transform: rotate(3deg);
+  -ms-transform: rotate(3deg);
+  -o-transform: rotate(3deg);
+  transform: rotate(3deg);
+}
+table .no {
+  background-color: #f66;
+}
+table .kinda {
+  background-color: #ff6;
+}
+.slide table td:first-child {
+  border-right: 1px solid #cde;
+}
+.slide thead tr {
+  padding: 0 0.5em;
+}
+.slide thead td {
+  padding: 1em;
+  border-bottom: 1px solid #cde;
+}
+.slide tbody td {
+  padding: 0.5em 1em;
+}
+.net-state, .ready-state {
+  float: left;
+  width: 50%;
+}
+.events {
+  clear: both;
+}
+.events li {
+  width: 33%;
+  float: left;
+}
+.slide .advice {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 15em;
+}
+</style>
+
+</head>
+<body class='deck-container'>
+
+<section class='slide' id='title'>
+<hgroup>
+<h1>Mobile Video</h1>
+</hgroup>
+</section>
+
+<section class='slide' id='formats'>
+<h2>Video Formats</h2>
+<table>
+  <thead>
+    <tr><td>Browser</td><td>H264+AAC+MPEG-4</td><td>Theora+Vorbis+Ogg</td><td>WebM</td></tr>
+  </thead>
+  <tbody>
+    <tr><td>IE</td><td>9.0+</td><td class='no'>no</td><td>9.0+</td></tr>
+    <tr><td>Firefox</td><td class='no'>no</td><td>3.5+</td><td class='no'>no</td></tr>
+    <tr><td>Safari</td><td>3.0+</td><td class='kinda'>not really</td><td class='kinda'>not really</td></tr>
+    <tr><td>Chrome</td><td class='kinda'>5.0 - ??</td><td>5.0+</td><td>6.0+</td></tr>
+    <tr><td>Opera</td><td class='no'>no</td><td>10.5+</td><td>10.6+</td></tr>
+    <tr><td>iOS</td><td>3.0+</td><td class='no'>no</td><td class='no'>no</td></tr>
+    <tr><td>Android</td><td>2.0+</td><td class='no'>no</td><td class='no'>no</td></tr>
+  </tbody>
+</table>
+<small>(Courtesy <a href="http://diveintohtml5.info/video.html">diveintohtml5</a>)</small>
+</section>
+
+<section class='slide' id='video-state'>
+<h2>What Should Work</h2>
+<div class='net-state'>
+<h3>Network State</h3>
+<small>Is my cell bill exploding right now?</small>
+<ol>
+  <li>NETWORK_EMPTY</li>
+  <li>NETWORK_IDLE</li>
+  <li>NETWORK_LOADING</li>
+  <li>NETWORK_NO_SOURCE</li>
+</ol>
+</div>
+<div class='ready-state'>
+<h3>Ready State</h3>
+<small>Is there any chance we'll stop buffering soon?</small>
+<ol>
+  <li>HAVE_NOTHING</li>
+  <li>HAVE_METADATA</li>
+  <li>HAVE_CURRENT_DATA</li>
+  <li>HAVE_FUTURE_DATA</li>
+  <li>HAVE_ENOUGH_DATA</li>
+</ol>
+</div>
+<div class='events'>
+<h3>Events</h3>
+<ul>
+  <li>loadstart</li>
+  <li>progress</li>
+  <li>suspend</li>
+  <li>abort</li>
+  <li>error</li>
+  <li>emptied</li>
+  <li>stalled</li>
+  <li>loadedmetadata</li>
+  <li>loadeddata</li>
+  <li>canplay</li>
+  <li>canplaythrough</li>
+  <li>playing</li>
+  <li>waiting</li>
+  <li>seeking</li>
+  <li>seeked</li>
+  <li>ended</li>
+  <li>durationchange</li>
+  <li>timeupdate</li>
+  <li>play</li>
+  <li>pause</li>
+  <li>ratechange</li>
+  <li>volumechange</li>
+</ul>
+</div>
+</section>
+
+<section class='slide' id='format-support'>
+<h2>Ask a Stupid Question...</h2>
+<pre>
+video.canPlayType('video/mp4; codecs="avc1.42E01E, mp4a.40.2"');
+</pre>
+<dl>
+  <dt>Best case:</dt>
+  <dd><code>"probably"</code></dd>
+  <dt>More likely:</dt>
+  <dd><code>"maybe"</code></dd>
+  <dt>Fat chance:</dt>
+  <dd><code>""</code> or <code>null</code></dd>
+</section>
+
+<section class='slide' id='problems'>
+<h2>99 Problems</h2>
+<ul>
+  <li><a target='_blank' href='controls.html'>Assuming Control</a></li>
+  <li><a target='_blank' href='overlay.html'>Missing Events</a></li>
+  <li><a target='_blank' href='dueling.html'>Crossing the Streams</a></li>
+</ul>
+</section>
+
+<section class='slide' id='tools'>
+<h2>Tools</h2>
+<ul>
+  <li>
+    <a href='http://developer.android.com/sdk/index.html'>Android</a>
+    and
+    <a href='https://developer.apple.com/xcode/'>iOS Simulators</a></li>
+  <li><a href='http://www.iwebinspector.com/'>iWebInspector</a></li>
+  <li><a href='http://phonegap.github.com/weinre/'>weinre</a></li>
+</ul>
+</section>
+
+<section class='slide' id='summary'>
+<h2>Final Thoughts</h2>
+<strong class='advice'>Stay on the happy path!</strong>
+</section>
+
+<!-- deck.hash snippet -->
+<a href="." title="Permalink to this slide" class="deck-permalink">#</a>
+
+<!-- Grab CDN jQuery, with a protocol relative URL; fall back to local if offline -->
+<script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+<script>window.jQuery || document.write('<script src="deck/jquery-1.7.min.js"><\/script>')</script>
+
+<!-- Deck Core and extensions -->
+<script src="deck/core/deck.core.js"></script>
+<script src="deck/extensions/hash/deck.hash.js"></script>
+<script src="deck/extensions/menu/deck.menu.js"></script>
+<script src="deck/extensions/goto/deck.goto.js"></script>
+<script src="deck/extensions/status/deck.status.js"></script>
+<script src="deck/extensions/navigation/deck.navigation.js"></script>
+
+<!-- Initialize the deck -->
+<script>
+$(function() {
+	$.deck('.slide');
+});
+</script>
+</body>
+</html>

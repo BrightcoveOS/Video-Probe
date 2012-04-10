@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+<title>Mix-and-Match Controls</title>
+</head>
+<body>
+<h1>Mix-and-Match</h1>
+<video id='v0' src='Vfe_html5.mp4' controls height='360' width='640'>
+Your browser does not support HTML video.
+</video>
+<script src='jquery-1.7.2.js'></script>
+<script>
+$(function() {
+  var $video = $('video');
+  $('<a target="_blank" href="http://google.com"><marquee>!!! You\'ve won a <strong>FREE</strong> iPad !!!</marquee></a>')
+    .css({
+      color: 'red',
+      'background-color': 'white',
+      'line-height': '40px',
+      border: 'thin solid gray',
+      position: 'absolute',
+      top: ($video.offset().top + 3) + 'px',
+      left: ($video.offset().left + 3) + 'px'
+    })
+    .insertAfter($video);
+});
+</script>
+</body>
+</html>

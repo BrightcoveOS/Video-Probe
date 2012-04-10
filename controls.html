@@ -2,12 +2,25 @@
 <html>
 <head>
 <title>Plain Video</title>
+<style>
+button {
+  display: block;
+}
+.dream, .reality {
+  float: left;
+  width: 49.9%;
+}
+.reality {
+  display: none;
+}
+</style>
 </head>
 <body>
 <h1>Plain Video</h1>
-<video src='Vfe_html5.mp4'>
+<video src='Vfe_html5.mp4' height='360' width='640'>
 Your browser does not support HTML video.
 </video>
+<button>Play</button>
 <section class='dream'>
 <h2>The Dream</h2>
 <pre>
@@ -39,7 +52,6 @@ $('button').click(function() {
 });
 </pre>
 </section>
-<button>Play</button>
 <script src='jquery-1.7.2.js'></script>
 <script src='jquery.video_probe-1.0.js'></script>
 <script>
@@ -53,7 +65,10 @@ $(function() {
       $(this).text('Play');
       $video[0].pause();
     }
- });
+  });
+  $('.dream').click(function() {
+    $('.reality').fadeIn();
+  });
 });
 </script>
 </body>
