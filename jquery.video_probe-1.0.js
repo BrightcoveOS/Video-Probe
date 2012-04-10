@@ -130,7 +130,7 @@
                   ' } ' +
                  '</style>');
       }
-      // bug in jQuery makes wrap unusable with video on ios
+      // bug makes jQuery.wrap unusable with video on ios
       var $container = $('<div class="video_probe-container" />');
       $container.html($video[0].outerHTML);
       $video[0].parentNode.replaceChild($container[0], $video[0]);
@@ -186,14 +186,10 @@
             .slideDown('fast');
         },
         logNetState: function($video) {
-          $net.children().css({
-            color: 'rgb(' + ($video[0].networkState / (networkStates.length - 1) * 255) + ',0,0)'
-          }).text(networkStates[$video[0].networkState]);
+          $net.children().text(networkStates[$video[0].networkState]);
         },
         logReadyState: function($video) {
-          $ready.children().css({
-            color: 'rgb(' + ($video[0].readyState / (readyStates.length - 1) * 255) + ',0,0)'
-          }).text(readyStates[$video[0].readyState]);
+          $ready.children().text(readyStates[$video[0].readyState]);
         }
       };
     };
