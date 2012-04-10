@@ -33,12 +33,25 @@
       'loading',
       'no-source'
     ],
+    networkStyles = [
+      {},
+      {},
+      {},
+      {}
+    ],
     readyStates = [
       'nothing',
       'metadata',
       'current',
       'future',
       'enough'
+    ],
+    readyStyles = [
+      {},
+      {},
+      {},
+      {},
+      {}
     ],
     consoleLogger,
     overlayLogger,
@@ -47,6 +60,7 @@
         var
           $video = $(video),
           logger = overlayLogger($video);
+        $video = logger.$video || $video;
         $.each(events, function(i, e) {
           $video.bind(e, function(event) {
             logger.logEvent(event);
@@ -90,82 +104,94 @@
                   '.video_probe-container { ' +
                   'position: relative;' +
                   ' } ' +
-                  '.video_probe { ' +
-                  'font-size: 16px;' +
+                  '.video_probe-status { ' +
+                  'border: 3px solid #555;' +
+                  'border-radius: 5px;' + 
+                  'background-color: white;' + 
                   'position: absolute;' +
-                  'min-width: 100px;' +
-                  'list-style-type: none;' +
-                  'color: white;' +
-                  'text-shadow: black 2px 2px 2px;' +
-                  'margin: 0;' +
-                  'padding: 3px;' +
+                  'top: 3px;' +
+                  'left: 3px;' +
+                  'font-size: 16px;' +
+                  'color: #333;' +
                   'font-family: Lucida Sans Unicode, Lucida Grande, sans-serif;' +
+                  'padding: 3px;' +
+                  'width: 150px;' +
+                  'opacity:0.7;' +
+                  ' } ' +
+                  '.video_probe-status label { ' +
+                  'display:block;' + 
                   ' } ' +
                   '.video_probe-events { ' +
+                  'border-top: 2px solid #555;' +
+                  'padding: 3px 0 0 0;' +
+                  'margin: 3px 0;' +
                   'list-style-type: none;' + 
-                  'min-width: 135px;' +
-                  '-webkit-mask-image: -webkit-linear-gradient(top, rgba(0,0,0,0) 0px, rgba(0,0,0,1) 25px);' +
+                  '-webkit-mask-image: -webkit-linear-gradient(bottom, rgba(0,0,0,0) 0px, rgba(0,0,0,1) 25px);' +
                   ' } ' +
                  '</style>');
       }
-      $video.wrap('<div class="video_probe-container" />');
-      $overlay = $('<div class="video_probe video_probe-net" />' +
-                   '<div class="video_probe video_probe-ready" />' +
-                   '<ol class="video_probe video_probe-events"><li>init<li></ol>')
-        .insertAfter($video),
-      console.log($video.offset(), $video.position());
-      $net = $overlay.eq(0)
+      // bug in jQuery makes wrap unusable with video on ios
+      var $container = $('<div class="video_probe-container" />');
+      $container.html($video[0].outerHTML);
+      $video[0].parentNode.replaceChild($container[0], $video[0]);
+      $video = $container.children().eq(0);
+      // $video.wrap('<div class="video_probe-container" />');
+      $overlay = $('<div class="video_probe-status">' +
+                   '<label>net: <span></span></label>' +
+                   '<label>ready: <span></span></label>' +
+                   '<ol class="video_probe video_probe-events"><li>init<li></ol>' +
+                   '</div>')
+        .insertAfter($video);
+      $net = $overlay.children().eq(0)
         .css({
           top: 0,
           left: $video.position().left,
-          width: desiredWidth
         });
-      $ready = $overlay.eq(1)
+      $ready = $overlay.children().eq(1)
         .css({
           top: 0,
           left: $net.position().left + $net.width(),
-          width: desiredWidth
         });
-      $events = $overlay.eq(2)
+      $events = $overlay.children().eq(2)
         .css({
           top: 0,
           left: $ready.position().left + $ready.width(),
-          width: desiredWidth
         });
         
       return {
+        $video: $video,
         logEvent: function(event) {
           var
             $children = $events.children(':not(.video_probe-leaving)'),
-            $lastEvent = $children.last(),
+            $newestEvent = $children.first(),
             count = $children.size(),
-            data = $lastEvent.data('video_probe') || {};
+            data = $newestEvent.data('video_probe') || {};
           if (data.type === event.type) {
             // repeated event
             data.count++;
-            $lastEvent.text('(' + data.count + ') ' + event.type);
+            $newestEvent.text('(' + data.count + ') ' + event.type);
             return;
           }
           if (count > maxEvents) {
-            $children.first()
+            $children.last()
               .addClass('video_probe-leaving')
-              .slideUp('fast', function() {
+              .slideDown('fast', function() {
                 $(this).remove();
               });
           }
           $('<li>' + event.type + '</li>')
             .hide()
             .data('video_probe', { type: event.type, count: 1 })
-            .appendTo($events)
+            .prependTo($events)
             .slideDown('fast');
         },
         logNetState: function($video) {
-          $net.css({
+          $net.children().css({
             color: 'rgb(' + ($video[0].networkState / (networkStates.length - 1) * 255) + ',0,0)'
           }).text(networkStates[$video[0].networkState]);
         },
         logReadyState: function($video) {
-          $ready.css({
+          $ready.children().css({
             color: 'rgb(' + ($video[0].readyState / (readyStates.length - 1) * 255) + ',0,0)'
           }).text(readyStates[$video[0].readyState]);
         }

@@ -92,6 +92,11 @@ table .kinda {
   float: left;
   width: 50%;
 }
+.video-probe {
+  display: block;
+  text-align: center;
+  clear: both;
+}
 .events {
   clear: both;
 }
@@ -133,6 +138,20 @@ table .kinda {
   </tbody>
 </table>
 <small>(Courtesy <a href="http://diveintohtml5.info/video.html">diveintohtml5</a>)</small>
+</section>
+
+<section class='slide' id='format-support'>
+<h2>Ask a Stupid Question...</h2>
+<pre>
+video.canPlayType('video/mp4; codecs="avc1.42E01E, mp4a.40.2"');
+</pre>
+<dl>
+  <dt>Best case:</dt>
+  <dd><code>"probably"</code></dd>
+  <dt>More likely:</dt>
+  <dd><code>"maybe"</code></dd>
+  <dt>Fat chance:</dt>
+  <dd><code>""</code> or <code>null</code></dd>
 </section>
 
 <section class='slide' id='video-state'>
@@ -184,21 +203,8 @@ table .kinda {
   <li>ratechange</li>
   <li>volumechange</li>
 </ul>
+<a class='video-probe' href='video-probe.html'>video probe</a>
 </div>
-</section>
-
-<section class='slide' id='format-support'>
-<h2>Ask a Stupid Question...</h2>
-<pre>
-video.canPlayType('video/mp4; codecs="avc1.42E01E, mp4a.40.2"');
-</pre>
-<dl>
-  <dt>Best case:</dt>
-  <dd><code>"probably"</code></dd>
-  <dt>More likely:</dt>
-  <dd><code>"maybe"</code></dd>
-  <dt>Fat chance:</dt>
-  <dd><code>""</code> or <code>null</code></dd>
 </section>
 
 <section class='slide' id='problems'>
