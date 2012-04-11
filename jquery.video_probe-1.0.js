@@ -1,5 +1,6 @@
 /**
- * 2012, David LaPalomento
+ * Copyright 2012, Brightcove
+ * Author: David LaPalomento
  */
 (function(window, $, undefined) {
   var
@@ -33,25 +34,12 @@
       'loading',
       'no-source'
     ],
-    networkStyles = [
-      {},
-      {},
-      {},
-      {}
-    ],
     readyStates = [
       'nothing',
       'metadata',
       'current',
       'future',
       'enough'
-    ],
-    readyStyles = [
-      {},
-      {},
-      {},
-      {},
-      {}
     ],
     consoleLogger,
     overlayLogger,
@@ -92,13 +80,12 @@
     overlayLogger = function($video) {
       var
         maxEvents = 5,
-        desiredWidth = ($video.width() * 0.15) + 'px',
-        $styles = $('#video_probe-styles'),
         $overlay,
         $net,
         $ready,
-        $events;
-      if ($styles.size() < 1) {
+        $events,
+        $container;
+      if ($('#video_probe-styles').size() < 1) {
         $(document.body)
           .append('<style id="video_probe-styles">' +
                   '.video_probe-container { ' +
@@ -131,32 +118,19 @@
                  '</style>');
       }
       // bug makes jQuery.wrap unusable with video on ios
-      var $container = $('<div class="video_probe-container" />');
+      $container = $('<div class="video_probe-container" />');
       $container.html($video[0].outerHTML);
       $video[0].parentNode.replaceChild($container[0], $video[0]);
       $video = $container.children().eq(0);
-      // $video.wrap('<div class="video_probe-container" />');
       $overlay = $('<div class="video_probe-status">' +
-                   '<label>net: <span></span></label>' +
-                   '<label>ready: <span></span></label>' +
-                   '<ol class="video_probe video_probe-events"><li>init<li></ol>' +
-                   '</div>')
+                    '<label>net: <span></span></label>' +
+                    '<label>ready: <span></span></label>' +
+                    '<ol class="video_probe video_probe-events"><li>init<li></ol>' +
+                    '</div>')
         .insertAfter($video);
-      $net = $overlay.children().eq(0)
-        .css({
-          top: 0,
-          left: $video.position().left,
-        });
-      $ready = $overlay.children().eq(1)
-        .css({
-          top: 0,
-          left: $net.position().left + $net.width(),
-        });
-      $events = $overlay.children().eq(2)
-        .css({
-          top: 0,
-          left: $ready.position().left + $ready.width(),
-        });
+      $net = $overlay.children().eq(0);
+      $ready = $overlay.children().eq(1);
+      $events = $overlay.children().eq(2);
         
       return {
         $video: $video,
